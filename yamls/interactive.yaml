@@ -1,0 +1,20 @@
+name: interactive
+#image: mosaicml/pytorch:2.2.2_cu121-python3.11-ubuntu20.04
+image: mosaicml/pytorch:1.13.1_cu117-python3.10-ubuntu20.04
+
+integrations:
+- integration_type: git_repo
+  git_repo: yenlow/merck-merck-bert
+  git_branch: master # use your branch
+  ssh_clone: true # Should be true if using a private repo
+
+command: |
+  cd merck-bert
+  sh ./startup.sh
+  pip install -r requirements.txt
+  tail -f /dev/null
+#  /tmp/code tunnel --accept-server-license-terms --no-sleep --name mml-dev-01
+
+compute:
+  gpus: 8
+  cluster: r8z11

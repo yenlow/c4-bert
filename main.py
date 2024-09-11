@@ -215,7 +215,7 @@ def main(cfg: DictConfig,
     ]
 
     if cfg.get('run_name') is None:
-        cfg.run_name = os.environ.get('COMPOSER_RUN_NAME', 'bert')
+        cfg.run_name = os.environ.get('COMPOSER_RUN_NAME', 'merck-bert')
 
     # Build the Trainer
     trainer = Trainer(

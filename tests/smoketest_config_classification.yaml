@@ -1,4 +1,4 @@
-tokenizer_name: prajjwal1/bert-tiny
+tokenizer_name: prajjwal1/merck-bert-tiny
 max_seq_len: 32
 
 # Run Name

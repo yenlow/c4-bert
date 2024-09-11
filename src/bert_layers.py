@@ -70,7 +70,7 @@ class BertEmbeddings(nn.Module):
     embeddings.
 
     This module is modeled after the Hugging Face BERT's
-    :class:`~transformers.model.bert.modeling_bert.BertEmbeddings`, but is
+    :class:`~transformers.model.merck-bert.modeling_bert.BertEmbeddings`, but is
     modified as part of Mosaic BERT's ALiBi implementation. The key change is
     that position embeddings are removed. Position information instead comes
     from attention biases that scale linearly with the position distance
@@ -252,7 +252,7 @@ class BertSelfOutput(nn.Module):
     """Computes the output of the attention layer.
 
     This module is modeled after the Hugging Face BERT's
-    :class:`~transformers.model.bert.modeling_bert.BertSelfOutput`.
+    :class:`~transformers.model.merck-bert.modeling_bert.BertSelfOutput`.
     The implementation is identical. Rather than use the original module
     directly, we re-implement it here so that Mosaic BERT's modules will not
     be affected by any Composer surgery algorithm that modifies Hugging Face
@@ -317,8 +317,8 @@ class BertUnpadAttention(nn.Module):
 class BertGatedLinearUnitMLP(nn.Module):
     """Applies the FFN at the end of each Mosaic BERT layer.
 
-    Compared to the default BERT architecture, this block replaces :class:`~transformers.model.bert.modeling_bert.BertIntermediate`
-    and :class:`~transformers.model.bert.modeling_bert.SelfOutput` with a single module that has similar functionality, but
+    Compared to the default BERT architecture, this block replaces :class:`~transformers.model.merck-bert.modeling_bert.BertIntermediate`
+    and :class:`~transformers.model.merck-bert.modeling_bert.SelfOutput` with a single module that has similar functionality, but
     introduces Gated Linear Units.
 
     Note: Mosaic BERT adds parameters in order to implement Gated Linear Units. To keep parameter count consistent with that of a
@@ -401,7 +401,7 @@ class BertLayer(nn.Module):
 class BertEncoder(nn.Module):
     """A stack of BERT layers providing the backbone of Mosaic BERT.
 
-    This module is modeled after the Hugging Face BERT's :class:`~transformers.model.bert.modeling_bert.BertEncoder`,
+    This module is modeled after the Hugging Face BERT's :class:`~transformers.model.merck-bert.modeling_bert.BertEncoder`,
     but with substantial modifications to implement unpadding and ALiBi.
 
     Compared to the analogous Hugging Face BERT module, this module handles unpadding to reduce unnecessary computation

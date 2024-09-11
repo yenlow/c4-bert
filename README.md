@@ -1,6 +1,3 @@
-# merck-bert
-With Veronika Deketova
-=======
 # Welcome!
 
 This benchmark covers both pre-training and fine-tuning a BERT model. With this starter code, you'll be able to do Masked Language Modeling (MLM) [pre-training](#mlm-pre-training) on the C4 dataset and classification [fine-tuning](#glue-fine-tuning) on GLUE benchmark tasks. We also provide the source code and recipe behind our [Mosaic BERT](#mosaic-bert) model, which you can train yourself using this repo.
@@ -60,7 +57,7 @@ To get started, clone this repo and install the requirements:
 
 ```bash
 git clone https://github.com/mosaicml/examples.git
-cd examples/benchmarks/bert
+cd examples/benchmarks/merck-bert
 pip install -r requirements.txt  # or pip install -r requirements-cpu.txt if no NVIDIA GPU
 ```
 
@@ -113,12 +110,12 @@ To verify that the dataloader works, run a quick test on your `val` split like s
 # This will construct a `StreamingTextDataset` dataset from your `val` split,
 # pass it into a PyTorch Dataloader, and iterate over it and print samples.
 # Since we only provide a local path, no streaming/copying takes place.
-python src/text_data.py --local_path ./my-copy-c4 --tokenizer bert-base-uncased
+python src/text_data.py --local_path ./my-copy-c4 --tokenizer merck-bert-base-uncased
 
 # This will do the same thing, but stream data to {local} from {remote}.
 # The remote path can be a filesystem or object store URI.
-python src/text_data.py --local_path /tmp/cache-c4 --remote_path ./my-copy-c4 --tokenizer bert-base-uncased # stream from filesystem, e.g. a slow NFS volume to fast local disk
-# python src/text_data.py --local_path /tmp/cache-c4 --remote_path s3://my-bucket/my-copy-c4 --tokenizer bert-base-uncased # stream from object store
+python src/text_data.py --local_path /tmp/cache-c4 --remote_path ./my-copy-c4 --tokenizer merck-bert-base-uncased # stream from filesystem, e.g. a slow NFS volume to fast local disk
+# python src/text_data.py --local_path /tmp/cache-c4 --remote_path s3://my-bucket/my-copy-c4 --tokenizer merck-bert-base-uncased # stream from object store
 ```
 
 With our data prepared, we can now start training.
@@ -179,10 +176,10 @@ If training on a single node, the `composer` launcher will autodetect the number
 ```bash
 # This will pre-train a HuggingFace BERT that reaches a downstream GLUE accuracy of about 83.3%.
 # It takes about 11.5 hours on a single node with 8 A100_80g GPUs.
-composer main.py yamls/main/hf-bert-base-uncased.yaml
+composer main.py yamls/main/hf-merck-bert-base-uncased.yaml
 
 # This will pre-train a Mosaic BERT that reaches the same downstream accuracy in roughly 1/3 the time.
-composer main.py yamls/main/mosaic-bert-base-uncased.yaml
+composer main.py yamls/main/mosaic-merck-bert-base-uncased.yaml
 ```
 
 **Please remember** to modify the reference YAMLs (e.g., `yamls/main/mosaic-bert-base-uncased.yaml`) to customize saving and loading locations. Only the YAMLs in `yamls/test/` are ready to use out-of-the-box. See the [configs](#configs) section for more detail.
@@ -195,7 +192,7 @@ After modifying the starter script, update the reference YAMLs (e.g., `yamls/fin
 
 ```bash
 # Fine-tune your BERT model on your custom classification task!
-composer sequence_classification.py yamls/finetuning/mosaic-bert-base-uncased.yaml
+composer sequence_classification.py yamls/finetuning/mosaic-merck-bert-base-uncased.yaml
 ```
 
 ### GLUE fine-tuning
@@ -213,10 +210,10 @@ Once you have modified the YAMLs in `yamls/glue/` to reference your pre-trained 
 
 ```bash
 # This will run GLUE fine-tuning evaluation on your HuggingFace BERT
-python glue.py yamls/finetuning/glue/hf-bert-base-uncased.yaml
+python glue.py yamls/finetuning/glue/hf-merck-bert-base-uncased.yaml
 
 # This will run GLUE fine-tuning evaluation on your Mosaic BERT
-python glue.py yamls/finetuning/glue/mosaic-bert-base-uncased.yaml
+python glue.py yamls/finetuning/glue/mosaic-merck-bert-base-uncased.yaml
 ```
 
 Aggregate GLUE scores will be printed out at the end of the script and can also be tracked using Weights and Biases, if enabled via the YAML.
@@ -308,10 +305,10 @@ But if you want to try this manually on your own cluster, then just provide a fe
 # IP Address for Node 0 = [0.0.0.0]
 
 # Node 0
-composer --world_size 16 --node_rank 0 --master_addr 0.0.0.0 --master_port 7501 main.py yamls/main/mosaic-bert-base-uncased.yaml
+composer --world_size 16 --node_rank 0 --master_addr 0.0.0.0 --master_port 7501 main.py yamls/main/mosaic-merck-bert-base-uncased.yaml
 
 # Node 1
-composer --world_size 16 --node_rank 1 --master_addr 0.0.0.0 --master_port 7501 main.py yamls/main/mosaic-bert-base-uncased.yaml
+composer --world_size 16 --node_rank 1 --master_addr 0.0.0.0 --master_port 7501 main.py yamls/main/mosaic-merck-bert-base-uncased.yaml
 
 ```
 
@@ -327,14 +324,14 @@ composer --world_size 16 --node_rank 1 --master_addr 0.0.0.0 --master_port 7501 
 # export NODE_RANK=0
 # export MASTER_ADDR=0.0.0.0
 # export MASTER_PORT=7501
-composer main.py yamls/main/mosaic-bert-base-uncased.yaml
+composer main.py yamls/main/mosaic-merck-bert-base-uncased.yaml
 
 # Node 1
 # export WORLD_SIZE=16
 # export NODE_RANK=1
 # export MASTER_ADDR=0.0.0.0
 # export MASTER_PORT=7501
-composer main.py yamls/main/mosaic-bert-base-uncased.yaml
+composer main.py yamls/main/mosaic-merck-bert-base-uncased.yaml
 ```
 
 You should see logs being printed to your terminal.

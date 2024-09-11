@@ -8,7 +8,7 @@
 #   Please resolve any empty fields before launching!
 #   When ready, use `mcli run -f yamls/finetuning/mcloud_run.yaml` to launch
 
-name: finetune-mosaic-bert
+name: finetune-mosaic-merck-bert
 image: mosaicml/pytorch:1.13.1_cu117-python3.10-ubuntu20.04
 
 compute:
@@ -23,7 +23,7 @@ integrations:
   git_repo: mosaicml/examples
   git_branch: v0.0.4 # use your branch
   # git_commit: # OR use your commit hash
-  pip_install: -e .[bert]
+  pip_install: -e .[merck-bert]
   ssh_clone: false # Should be true if using a private repo
 command: |
   cd examples/examples/bert
@@ -32,7 +32,7 @@ command: |
 parameters:
   run_name: # If left blank, will be read from top YAML name for W&B logging and checkpointing
 
-  tokenizer_name: bert-base-uncased
+  tokenizer_name: merck-bert-base-uncased
   max_seq_len: 128
 
   load_path: # (Optionally, but recommended) provide a composer checkpoint to use for the starting weights

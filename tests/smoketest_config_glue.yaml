@@ -7,18 +7,18 @@ default_seed: 1111
 precision: fp32
 
 # Tokenizer for dataset creation
-tokenizer_name: bert-base-uncased
+tokenizer_name: merck-bert-base-uncased
 
 # Base model config
 model:
   name:
-  pretrained_model_name: prajjwal1/bert-tiny
+  pretrained_model_name: prajjwal1/merck-bert-tiny
   tokenizer_name: ${tokenizer_name}
 
 
 # Loading
 starting_checkpoint_load_path:      # Start from scratch for the sake of testing
-local_pretrain_checkpoint_folder: ./local-bert-checkpoints/
+local_pretrain_checkpoint_folder: ./local-merck-bert-checkpoints/
 
 # Saving
 save_finetune_checkpoint_prefix: ./local-finetune-checkpoints/ # (local)

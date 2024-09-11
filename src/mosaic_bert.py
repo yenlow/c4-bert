@@ -26,7 +26,7 @@ from torchmetrics.regression.spearman import SpearmanCorrCoef
 all = ['create_mosaic_bert_mlm', 'create_mosaic_bert_classification']
 
 
-def create_mosaic_bert_mlm(pretrained_model_name: str = 'bert-base-uncased',
+def create_mosaic_bert_mlm(pretrained_model_name: str = 'merck-bert-base-uncased',
                            model_config: Optional[dict] = None,
                            tokenizer_name: Optional[str] = None,
                            gradient_checkpointing: Optional[bool] = False,
@@ -43,7 +43,7 @@ def create_mosaic_bert_mlm(pretrained_model_name: str = 'bert-base-uncased',
     Args:
         pretrained_model_name (str): Name of the Hugging Face model to
             instantiate. This will determine the default model configuration.
-            Default: ``bert-base-uncased``.
+            Default: ``merck-bert-base-uncased``.
         model_config (dict): A dictionary of user-specified configurations to
             update/add to the default model configuration.
         tokenizer_name (str, optional): Tokenizer name used to preprocess the
@@ -58,7 +58,7 @@ def create_mosaic_bert_mlm(pretrained_model_name: str = 'bert-base-uncased',
     .. code-block::
 
         {
-        "_name_or_path": "bert-base-uncased",
+        "_name_or_path": "merck-bert-base-uncased",
         "alibi_starting_size": 512,
         "architectures": ["BertForMaskedLM"],
         "attention_probs_dropout_prob": 0.0,
@@ -71,7 +71,7 @@ def create_mosaic_bert_mlm(pretrained_model_name: str = 'bert-base-uncased',
         "intermediate_size": 3072,
         "layer_norm_eps": 1e-12,
         "max_position_embeddings": 512,
-        "model_type": "bert",
+        "model_type": "merck-bert",
         "num_attention_heads": 12,
         "num_hidden_layers": 12,
         "pad_token_id": 0,
@@ -93,7 +93,7 @@ def create_mosaic_bert_mlm(pretrained_model_name: str = 'bert-base-uncased',
         model_config = {}
 
     if not pretrained_model_name:
-        pretrained_model_name = 'bert-base-uncased'
+        pretrained_model_name = 'merck-bert-base-uncased'
 
     config = configuration_bert_module.BertConfig.from_pretrained(
         pretrained_model_name, **model_config)
@@ -141,7 +141,7 @@ def create_mosaic_bert_mlm(pretrained_model_name: str = 'bert-base-uncased',
 
 def create_mosaic_bert_classification(
         num_labels: int,
-        pretrained_model_name: str = 'bert-base-uncased',
+        pretrained_model_name: str = 'merck-bert-base-uncased',
         model_config: Optional[dict] = None,
         tokenizer_name: Optional[str] = None,
         gradient_checkpointing: Optional[bool] = False,
@@ -158,7 +158,7 @@ def create_mosaic_bert_classification(
         num_labels (int): The number of classes in the classification task.
         pretrained_model_name (str): Name of the Hugging Face model to
             instantiate. This will determine the default model configuration.
-            Default: ``bert-base-uncased``.
+            Default: ``merck-bert-base-uncased``.
         model_config (dict): A dictionary of user-specified configurations to
             update/add to the default model configuration.
         tokenizer_name (str, optional): Tokenizer name used to preprocess the
@@ -172,7 +172,7 @@ def create_mosaic_bert_classification(
 
     .. code-block::
         {
-            "_name_or_path": "bert-base-uncased",
+            "_name_or_path": "merck-bert-base-uncased",
             "alibi_starting_size": 512,
             "architectures": [
             "BertForSequenceClassification
@@ -197,7 +197,7 @@ def create_mosaic_bert_classification(
             },
             "layer_norm_eps": 1e-12,
             "max_position_embeddings": 512,
-            "model_type": "bert",
+            "model_type": "merck-bert",
             "num_attention_heads": 12,
             "num_hidden_layers": 12,
             "pad_token_id": 0,
@@ -244,7 +244,7 @@ def create_mosaic_bert_classification(
     model_config['num_labels'] = num_labels
 
     if not pretrained_model_name:
-        pretrained_model_name = 'bert-base-uncased'
+        pretrained_model_name = 'merck-bert-base-uncased'
 
     config, unused_kwargs = transformers.AutoConfig.from_pretrained(
         pretrained_model_name, return_unused_kwargs=True, **model_config)

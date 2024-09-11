@@ -19,7 +19,7 @@ from torchmetrics.regression.spearman import SpearmanCorrCoef
 __all__ = ['create_hf_bert_mlm', 'create_hf_bert_classification']
 
 
-def create_hf_bert_mlm(pretrained_model_name: str = 'bert-base-uncased',
+def create_hf_bert_mlm(pretrained_model_name: str = 'merck-bert-base-uncased',
                        use_pretrained: Optional[bool] = False,
                        model_config: Optional[dict] = None,
                        tokenizer_name: Optional[str] = None,
@@ -29,7 +29,7 @@ def create_hf_bert_mlm(pretrained_model_name: str = 'bert-base-uncased',
     For more information, see `Transformers <https://huggingface.co/transformers/>`_.
 
     Args:
-        pretrained_model_name (str): Name of the Hugging Face model to instantiate. Default: ``'bert-base-uncased'``.
+        pretrained_model_name (str): Name of the Hugging Face model to instantiate. Default: ``'merck-bert-base-uncased'``.
         use_pretrained (bool, optional): Whether to initialize the model with the pretrained weights. Default: ``False``.
         model_config (dict): The settings used to create a Hugging Face BertConfig. BertConfig is used to specify the
             architecture of a Hugging Face model.
@@ -39,7 +39,7 @@ def create_hf_bert_mlm(pretrained_model_name: str = 'bert-base-uncased',
         .. code-block::
 
             {
-              "_name_or_path": "bert-base-uncased",
+              "_name_or_path": "merck-bert-base-uncased",
               "architectures": ["BertForMaskedLM"],
               "attention_probs_dropout_prob": 0.1,
               "classifier_dropout": null,
@@ -51,7 +51,7 @@ def create_hf_bert_mlm(pretrained_model_name: str = 'bert-base-uncased',
               "intermediate_size": 3072,
               "layer_norm_eps": 1e-12,
               "max_position_embeddings": 512,
-              "model_type": "bert",
+              "model_type": "merck-bert",
               "num_attention_heads": 12,
               "num_hidden_layers": 12,
               "pad_token_id": 0,
@@ -79,7 +79,7 @@ def create_hf_bert_mlm(pretrained_model_name: str = 'bert-base-uncased',
         model_config = {}
 
     if not pretrained_model_name:
-        pretrained_model_name = 'bert-base-uncased'
+        pretrained_model_name = 'merck-bert-base-uncased'
 
     if use_pretrained:
         assert transformers.AutoModelForMaskedLM.from_pretrained is not None, 'AutoModelForMaskedLM has from_pretrained method'
@@ -113,7 +113,7 @@ def create_hf_bert_mlm(pretrained_model_name: str = 'bert-base-uncased',
 
 def create_hf_bert_classification(
         num_labels: int,
-        pretrained_model_name: str = 'bert-base-uncased',
+        pretrained_model_name: str = 'merck-bert-base-uncased',
         use_pretrained: Optional[bool] = False,
         model_config: Optional[dict] = None,
         tokenizer_name: Optional[str] = None,
@@ -124,7 +124,7 @@ def create_hf_bert_classification(
 
     Args:
         num_labels (int): The number of classes in the task (``1`` indicates regression). Default: ``2``.
-        pretrained_model_name (str): Name of the Hugging Face model to instantiate. Default: ``'bert-base-uncased'``.
+        pretrained_model_name (str): Name of the Hugging Face model to instantiate. Default: ``'merck-bert-base-uncased'``.
         use_pretrained (bool, optional): Whether to initialize the model with the pretrained weights. Default: ``False``.
         model_config (dict, optional): The settings used to create a Hugging Face BertConfig. BertConfig is used to specify the
             architecture of a Hugging Face model.
@@ -134,7 +134,7 @@ def create_hf_bert_classification(
         .. code-block::
 
             {
-              "_name_or_path": "bert-base-uncased",
+              "_name_or_path": "merck-bert-base-uncased",
               "architectures": [
                 "BertForSequenceClassification
               ],
@@ -158,7 +158,7 @@ def create_hf_bert_classification(
               },
               "layer_norm_eps": 1e-12,
               "max_position_embeddings": 512,
-              "model_type": "bert",
+              "model_type": "merck-bert",
               "num_attention_heads": 12,
               "num_hidden_layers": 12,
               "pad_token_id": 0,
@@ -189,7 +189,7 @@ def create_hf_bert_classification(
     model_config['num_labels'] = num_labels
 
     if not pretrained_model_name:
-        pretrained_model_name = 'bert-base-uncased'
+        pretrained_model_name = 'merck-bert-base-uncased'
 
     if use_pretrained:
         assert transformers.AutoModelForSequenceClassification.from_pretrained is not None, 'AutoModelForSequenceClassification has from_pretrained method'

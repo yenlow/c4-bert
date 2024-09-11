@@ -1,9 +1,9 @@
 # Use this YAML to verify that fine-tuning starter script works. Runs on CPU or GPUs (if available).
-# From `examples/bert`, run:
+# From `examples/merck-bert`, run:
 #   `composer sequence_classification.py yamls/test/sequence_classification.yaml` (HuggingFace BERT)
 #   `composer sequence_classification.py yamls/test/sequence_classification.yaml model.name=mosaic_bert` (Mosaic BERT)
 
-tokenizer_name: prajjwal1/bert-tiny
+tokenizer_name: prajjwal1/merck-bert-tiny
 max_seq_len: 128
 
 # Run Name

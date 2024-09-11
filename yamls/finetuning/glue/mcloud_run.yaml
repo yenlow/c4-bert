@@ -1,5 +1,5 @@
 # This YAML is intended to serve as a reference for running on the MosaicML platform
-# The config from `yamls/glue/mosaic-bert-base-uncased.yaml` is copied into the `parameters` field below.
+# The config from `yamls/glue/mosaic-merck-bert-base-uncased.yaml` is copied into the `parameters` field below.
 # You can copy/modify the contents of this file to run different workloads, following the other
 # examples in this directory.
 #
@@ -8,7 +8,7 @@
 #
 # When ready, use `mcli run -f yamls/finetuning/glue/mcloud_run.yaml` to launch
 
-name: mosaic-bert-base-uncased-glue-finetuning
+name: mosaic-merck-bert-base-uncased-glue-finetuning
 image: mosaicml/pytorch:1.13.1_cu117-python3.10-ubuntu20.04
 
 compute:
@@ -23,13 +23,13 @@ integrations:
   git_repo: mosaicml/examples
   git_branch: v0.0.4 # use your branch
   # git_commit: # OR use your commit hash
-  pip_install: -e .[bert]
+  pip_install: -e .[merck-bert]
   ssh_clone: false # Should be true if using a private repo
 command: |
   cd examples/examples/bert
   python glue.py /mnt/config/parameters.yaml
 
-# Starting `parameters` copied from `yamls/glue/mosaic-bert-base-uncased.yaml`
+# Starting `parameters` copied from `yamls/glue/mosaic-merck-bert-base-uncased.yaml`
 # Changes to `parameters` will be reflected in `/mnt/config/parameters.yaml`, which
 # is the config that `glue.py` uses in the above command.
 parameters:
@@ -46,7 +46,7 @@ parameters:
   precision: bf16
 
   # Tokenizer for dataset creation
-  tokenizer_name: bert-base-uncased
+  tokenizer_name: merck-bert-base-uncased
 
   # Base model config
   model:
@@ -57,7 +57,7 @@ parameters:
   # Loading
   # (fill this in with the composer checkpoint from the end of pre-training a Mosaic BERT)
   starting_checkpoint_load_path: # Fill in with the checkpoint from pretraining
-  local_pretrain_checkpoint_folder: ./local-bert-checkpoints/
+  local_pretrain_checkpoint_folder: ./local-merck-bert-checkpoints/
 
   # Saving
   save_finetune_checkpoint_prefix: ./local-finetune-checkpoints/ # (local)

@@ -5,12 +5,12 @@
 parallel: true
 
 # Basic run configuration, additional details will be added to this name for each GLUE task, and each random seed
-base_run_name: mosaic-bert-base-uncased-glue-finetuning # Determines how runs are saved and logged in W&B
+base_run_name: mosaic-merck-bert-base-uncased-glue-finetuning # Determines how runs are saved and logged in W&B
 default_seed: 19
 precision: bf16
 
 # Tokenizer for dataset creation
-tokenizer_name: bert-base-uncased
+tokenizer_name: merck-bert-base-uncased
 
 # Base model config
 model:
@@ -21,7 +21,7 @@ model:
 # Loading
 # (fill this in with the composer checkpoint from the end of pre-training a Mosaic BERT)
 starting_checkpoint_load_path: <checkpoint_from_pretraining>
-local_pretrain_checkpoint_folder: ./local-bert-checkpoints/
+local_pretrain_checkpoint_folder: ./local-merck-bert-checkpoints/
 
 # Saving
 save_finetune_checkpoint_prefix: ./local-finetune-checkpoints/ # (local)

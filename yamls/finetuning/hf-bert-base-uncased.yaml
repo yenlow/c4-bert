@@ -8,9 +8,9 @@
 #   Please resolve any empty fields before launching!
 
 # Run Name
-run_name: finetune-hf-bert
+run_name: finetune-hf-merck-bert
 
-tokenizer_name: bert-base-uncased
+tokenizer_name: merck-bert-base-uncased
 max_seq_len: 128
 
 load_path: # (Optionally) provide a composer checkpoint to use for the starting weights
