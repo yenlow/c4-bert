@@ -4,7 +4,7 @@ image: mosaicml/pytorch:1.13.1_cu117-python3.10-ubuntu20.04
 
 integrations:
 - integration_type: git_repo
-  git_repo: yenlow/merck-merck-bert
+  git_repo: yenlow/merck-bert
   git_branch: master # use your branch
   ssh_clone: true # Should be true if using a private repo
 
