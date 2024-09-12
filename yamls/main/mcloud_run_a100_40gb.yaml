@@ -14,7 +14,7 @@ image: mosaicml/pytorch:1.13.1_cu117-python3.10-ubuntu20.04
 compute:
   #cluster: r7z22p1
   cluster: r8z11
-  gpus: 8  # Number of GPUs to use
+  gpus: 16  # Number of GPUs to use
   ## These configurations are optional
   # cluster: TODO # Name of the cluster to use for this run
   # gpu_type: a100_80gb # Type of GPU to use. We use a100_80gb in our experiments
@@ -80,7 +80,7 @@ parameters:
       shuffle: true
       mlm_probability: ${mlm_probability}
     drop_last: true
-    num_workers: 8
+    num_workers: 16
 
   eval_loader:
     name: text
@@ -93,7 +93,7 @@ parameters:
       shuffle: false
       mlm_probability: 0.15 # We always evaluate at 15% masking for consistent comparison
     drop_last: false
-    num_workers: 8
+    num_workers: 16
 
   # Optimization
   scheduler:
