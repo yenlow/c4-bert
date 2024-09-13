@@ -1,10 +1,12 @@
-mosaicml==0.23.5
-datasets
-mosaicml-streaming
-einops
-torch
-omegaconf
-transformers
-# need a newer version of triton
-triton
-mlflow
+omegaconf==2.3.0
+transformers==4.44.2
+triton==2.3.1
+mlflow==2.16.0
+# No need the following if image is mosaicml/composer
+# which is built on top of mosaicml/pytorch
+# Uncomment if you are using image mosaicml/pytorch
+#mosaicml==0.23.5
+#torch==2.3.1
+#datasets==2.20.0
+#mosaicml-streaming==0.8.0
+#einops==0.8.0

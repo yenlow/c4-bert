@@ -9,12 +9,15 @@
 # When ready, use `mcli run -f yamls/main/mcloud_run_a100_80gb.yaml` to launch
 
 name: mosaic-merck-bert-base-uncased-small-32-half-s3
-image: mosaicml/pytorch:1.13.1_cu117-python3.10-ubuntu20.04
+image: mosaicml/composer:0.23.5 #equivalent to pytorch:2.3.1_cu121-python3.11-ubuntu20.04
+#image: mosaicml/pytorch:1.13.1_cu117-python3.10-ubuntu20.04
+#image: mosaicml/pytorch:2.2.2_cu121-python3.11-ubuntu20.04
+
 
 compute:
-  cluster: r7z22p1
-  gpus: 32  # Number of GPUs to use
-
+  #cluster: r7z22p1
+  cluster: r8z11
+  gpus: 32 #Number of GPUs to use
   ## These configurations are optional
   # cluster: TODO # Name of the cluster to use for this run
   # gpu_type: a100_80gb # Type of GPU to use. We use a100_80gb in our experiments
@@ -22,10 +25,10 @@ compute:
 
 integrations:
 - integration_type: git_repo
-  git_repo: merck-gen/dags-aiml-mosaic-merck-bert-pretraining-test
-  git_branch: feature/BERT-test-pretrain # use your branch
+  git_repo: yenlow/merck-bert
+  git_branch: master # use your branch
   # git_commit: # OR use your commit hash
-  pip_install: -e .[merck-bert]
+#  pip_install: -e .[merck-bert]
   ssh_clone: true # Should be true if using a private repo
 
 # We are fetching, converting, and training on the 'train_small' split
@@ -33,7 +36,7 @@ integrations:
 # For real training runs, follow the instructions in `examples/merck-bert/README.md`
 # to convert and host the full 'train' dataset.
 command: |
-  cd dags-aiml-mosaic-bert-pretraining-test/mosaic-examples/examples/benchmarks/bert
+  cd merck-bert
   pip install -r requirements.txt
   composer main.py /mnt/config/parameters.yaml \
     train_loader.dataset.split=train_small
@@ -43,14 +46,14 @@ command: |
 # is the config that `main.py` uses in the above command.
 parameters:
   data_local:
-  data_remote: s3://rlsc-dags-aiml-uat-data-us-east-1/scratch/dags_aiml_platform_mosaic_assess_squad_2/train-small-split/ # If blank, files must be present in data_local
+  data_remote: s3://yen-mcli/merck-bert/c4/ # If blank, files must be present in data_local
 
   max_seq_len: 128
-  tokenizer_name: merck-bert-base-uncased
+  tokenizer_name: bert-base-uncased
   mlm_probability: 0.15
 
   # Run Name
-  run_name: hf-merck-bert-base-uncased
+  run_name: #leave blank for dynamic suffix to name
 
   # Model
   model:
@@ -79,7 +82,7 @@ parameters:
       shuffle: true
       mlm_probability: ${mlm_probability}
     drop_last: true
-    num_workers: 8
+    num_workers: 32
 
   eval_loader:
     name: text
@@ -92,7 +95,7 @@ parameters:
       shuffle: false
       mlm_probability: 0.15 # We always evaluate at 15% masking for consistent comparison
     drop_last: false
-    num_workers: 8
+    num_workers: 32
 
   # Optimization
   scheduler:
@@ -111,12 +114,12 @@ parameters:
 
   max_duration: 143360000sp # Subsample the training data for ~275M samples
   eval_interval: 2000ba
-  global_train_batch_size: 4096 #1024 #4096
+  global_train_batch_size: 4096 #1024
 
   # System
   seed: 17
-  device_eval_batch_size: 128 #64 #128
-  device_train_microbatch_size: 128 #64 #128
+  device_eval_batch_size: 128 #64
+  device_train_microbatch_size: 128 #64
   # device_train_microbatch_size: auto
   precision: amp_bf16
 
@@ -130,6 +133,8 @@ parameters:
     speed_monitor:
       window_size: 500
     lr_monitor: {}
+    memory_monitor: { }
+    runtime_estimator: { }
 
   # (Optional) W&B logging
   # loggers:
@@ -139,11 +144,18 @@ parameters:
 
   loggers:
     mlflow:
-      experiment_name: /Shared/DAGS AIML/detekova/mosaic-merck-bert
-      run_name: ${name}
-      tracking_uri: databricks
+#      experiment_name: /Shared/DAGS AIML/detekova/mosaic-merck-bert
+      experiment_name: merck-bert
+      run_name: ${run_name}
+      tags:
+        data_loc: s3
+        gpus: 32
 
   #(Optional) Checkpoint to local filesystem or remote object store
-  # save_interval: 3500ba
-  # save_num_checkpoints_to_keep: 1  # Important, this cleans up checkpoints saved to DISK
-  # save_folder: "dbfs:/databricks/mlflow-tracking/{mlflow_experiment_id}/{mlflow_run_id}/artifacts/"
+  autoresume: False #loads from save_folder instead of load_path
+  reset_time: False
+  save_overwrite: False
+  save_interval: 3500ba
+  save_num_checkpoints_to_keep: 1  # Important, this cleans up checkpoints saved to DISK
+#  load_path: "dbfs:/databricks/mlflow-tracking/1513674964105587/40e496beff704c78824813be5d24f7b7/artifacts/"
+  save_folder: "dbfs:/databricks/mlflow-tracking/{mlflow_experiment_id}/{mlflow_run_id}/artifacts/"
