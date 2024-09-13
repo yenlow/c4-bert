@@ -164,7 +164,7 @@ def main(cfg: DictConfig,
     print('Training using config: ')
     print(om.to_yaml(cfg))
     reproducibility.seed_all(cfg.seed)
-    dist.initialize_dist(get_device(), timeout=300)
+    dist.initialize_dist(get_device(None), timeout=300)
 
     # Get batch size info
     cfg = update_batch_size_info(cfg)
