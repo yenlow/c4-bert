@@ -20,7 +20,7 @@ from composer.optim import DecoupledAdamW
 from composer.optim.scheduler import (ConstantWithWarmupScheduler,
                                       CosineAnnealingWithWarmupScheduler,
                                       LinearWithWarmupScheduler)
-from composer.utils import dist, reproducibility
+from composer.utils import dist, reproducibility, get_device
 from omegaconf import DictConfig
 from omegaconf import OmegaConf as om
 
@@ -164,6 +164,7 @@ def main(cfg: DictConfig,
     print('Training using config: ')
     print(om.to_yaml(cfg))
     reproducibility.seed_all(cfg.seed)
+    dist.initialize_dist(get_device(), timeout=300)
 
     # Get batch size info
     cfg = update_batch_size_info(cfg)

@@ -13,10 +13,11 @@ image: mosaicml/composer:0.23.5 #equivalent to pytorch:2.3.1_cu121-python3.11-ub
 #image: mosaicml/pytorch:1.13.1_cu117-python3.10-ubuntu20.04
 #image: mosaicml/pytorch:2.2.2_cu121-python3.11-ubuntu20.04
 
+
 compute:
   #cluster: r7z22p1
   cluster: r8z11
-  gpus: 8 # 32 Number of GPUs to use
+  gpus: 32 #Number of GPUs to use
   ## These configurations are optional
   # cluster: TODO # Name of the cluster to use for this run
   # gpu_type: a100_80gb # Type of GPU to use. We use a100_80gb in our experiments
@@ -37,7 +38,6 @@ integrations:
 command: |
   cd merck-bert
   pip install -r requirements.txt
-  pip freeze
   composer main.py /mnt/config/parameters.yaml \
     train_loader.dataset.split=train_small
 
@@ -82,7 +82,7 @@ parameters:
       shuffle: true
       mlm_probability: ${mlm_probability}
     drop_last: true
-    num_workers: 8
+    num_workers: 32
 
   eval_loader:
     name: text
@@ -95,7 +95,7 @@ parameters:
       shuffle: false
       mlm_probability: 0.15 # We always evaluate at 15% masking for consistent comparison
     drop_last: false
-    num_workers: 8
+    num_workers: 32
 
   # Optimization
   scheduler:
@@ -112,14 +112,14 @@ parameters:
     eps: 1.0e-06
     weight_decay: 1.0e-5 # Amount of weight decay regularization
 
-  max_duration: 143360sp #143360000sp Subsample the training data for ~275M samples
-  eval_interval: 20ba #2000ba
-  global_train_batch_size: 4096 #1024 #4096
+  max_duration: 143360000sp # Subsample the training data for ~275M samples
+  eval_interval: 2000ba
+  global_train_batch_size: 4096 #1024
 
   # System
   seed: 17
-  device_eval_batch_size: 128 #64 #128
-  device_train_microbatch_size: 128 #64 #128
+  device_eval_batch_size: 128 #64
+  device_train_microbatch_size: 128 #64
   # device_train_microbatch_size: auto
   precision: amp_bf16
 
@@ -145,9 +145,11 @@ parameters:
   loggers:
     mlflow:
 #      experiment_name: /Shared/DAGS AIML/detekova/mosaic-merck-bert
-      experiment_name: /Users/yen.low@databricks.com/mlflow_experiments/merck-bert
+      experiment_name: merck-bert
       run_name: ${run_name}
-      tracking_uri: databricks
+      tags:
+        data_loc: s3
+        gpus: 32
 
   #(Optional) Checkpoint to local filesystem or remote object store
   autoresume: False #loads from save_folder instead of load_path
